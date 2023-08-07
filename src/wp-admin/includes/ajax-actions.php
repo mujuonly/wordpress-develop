@@ -148,7 +148,7 @@ function wp_ajax_ajax_tag_search() {
 	 * Require $term_search_min_chars chars for matching (default: 2)
 	 * ensure it's a non-negative, non-zero integer.
 	 */
-	if ( ( 0 == $term_search_min_chars ) || ( strlen( $search ) < $term_search_min_chars ) ) {
+	if ( ( 0 === $term_search_min_chars ) || ( strlen( $search ) < $term_search_min_chars ) ) {
 		wp_die();
 	}
 
@@ -205,10 +205,10 @@ function wp_ajax_wp_compression_test() {
 		$force_gzip = ( defined( 'ENFORCE_GZIP' ) && ENFORCE_GZIP );
 		$test_str   = '"wpCompressionTest Lorem ipsum dolor sit amet consectetuer mollis sapien urna ut a. Eu nonummy condimentum fringilla tempor pretium platea vel nibh netus Maecenas. Hac molestie amet justo quis pellentesque est ultrices interdum nibh Morbi. Cras mattis pretium Phasellus ante ipsum ipsum ut sociis Suspendisse Lorem. Ante et non molestie. Porta urna Vestibulum egestas id congue nibh eu risus gravida sit. Ac augue auctor Ut et non a elit massa id sodales. Elit eu Nulla at nibh adipiscing mattis lacus mauris at tempus. Netus nibh quis suscipit nec feugiat eget sed lorem et urna. Pellentesque lacus at ut massa consectetuer ligula ut auctor semper Pellentesque. Ut metus massa nibh quam Curabitur molestie nec mauris congue. Volutpat molestie elit justo facilisis neque ac risus Ut nascetur tristique. Vitae sit lorem tellus et quis Phasellus lacus tincidunt nunc Fusce. Pharetra wisi Suspendisse mus sagittis libero lacinia Integer consequat ac Phasellus. Et urna ac cursus tortor aliquam Aliquam amet tellus volutpat Vestibulum. Justo interdum condimentum In augue congue tellus sollicitudin Quisque quis nibh."';
 
-		if ( 1 == $_GET['test'] ) {
+		if ( 1 === $_GET['test'] ) {
 			echo $test_str;
 			wp_die();
-		} elseif ( 2 == $_GET['test'] ) {
+		} elseif ( 2 === $_GET['test'] ) {
 			if ( ! isset( $_SERVER['HTTP_ACCEPT_ENCODING'] ) ) {
 				wp_die( -1 );
 			}
@@ -513,7 +513,7 @@ function _wp_ajax_delete_comment_response( $comment_id, $delta = -1 ) {
 	}
 
 	// Only do the expensive stuff on a page-break, and about 1 other time per page.
-	if ( 0 == $total % $per_page || 1 == mt_rand( 1, $per_page ) ) {
+	if ( 0 === $total % $per_page || 1 === mt_rand( 1, $per_page ) ) {
 		$post_id = 0;
 		// What type of comment count are we looking for?
 		$status = 'all';
@@ -733,13 +733,13 @@ function wp_ajax_delete_comment() {
 	$status = wp_get_comment_status( $comment );
 	$delta  = -1;
 
-	if ( isset( $_POST['trash'] ) && 1 == $_POST['trash'] ) {
+	if ( isset( $_POST['trash'] ) && 1 === $_POST['trash'] ) {
 		if ( 'trash' === $status ) {
 			wp_die( time() );
 		}
 
 		$r = wp_trash_comment( $comment );
-	} elseif ( isset( $_POST['untrash'] ) && 1 == $_POST['untrash'] ) {
+	} elseif ( isset( $_POST['untrash'] ) && 1 === $_POST['untrash'] ) {
 		if ( 'trash' !== $status ) {
 			wp_die( time() );
 		}
@@ -750,13 +750,13 @@ function wp_ajax_delete_comment() {
 		if ( ! isset( $_POST['comment_status'] ) || 'trash' !== $_POST['comment_status'] ) {
 			$delta = 1;
 		}
-	} elseif ( isset( $_POST['spam'] ) && 1 == $_POST['spam'] ) {
+	} elseif ( isset( $_POST['spam'] ) && 1 === $_POST['spam'] ) {
 		if ( 'spam' === $status ) {
 			wp_die( time() );
 		}
 
 		$r = wp_spam_comment( $comment );
-	} elseif ( isset( $_POST['unspam'] ) && 1 == $_POST['unspam'] ) {
+	} elseif ( isset( $_POST['unspam'] ) && 1 === $_POST['unspam'] ) {
 		if ( 'spam' !== $status ) {
 			wp_die( time() );
 		}
@@ -767,7 +767,7 @@ function wp_ajax_delete_comment() {
 		if ( ! isset( $_POST['comment_status'] ) || 'spam' !== $_POST['comment_status'] ) {
 			$delta = 1;
 		}
-	} elseif ( isset( $_POST['delete'] ) && 1 == $_POST['delete'] ) {
+	} elseif ( isset( $_POST['delete'] ) && 1 === $_POST['delete'] ) {
 		$r = wp_delete_comment( $comment );
 	} else {
 		wp_die( -1 );
@@ -1000,7 +1000,7 @@ function wp_ajax_dim_comment() {
 
 	$current = wp_get_comment_status( $comment );
 
-	if ( isset( $_POST['new'] ) && $_POST['new'] == $current ) {
+	if ( isset( $_POST['new'] ) && $_POST['new'] === $current ) {
 		wp_die( time() );
 	}
 
@@ -1483,7 +1483,7 @@ function wp_ajax_edit_comment() {
 	}
 
 	$position      = ( isset( $_POST['position'] ) && (int) $_POST['position'] ) ? (int) $_POST['position'] : '-1';
-	$checkbox      = ( isset( $_POST['checkbox'] ) && true == $_POST['checkbox'] ) ? 1 : 0;
+	$checkbox      = ( isset( $_POST['checkbox'] ) && true === $_POST['checkbox'] ) ? 1 : 0;
 	$wp_list_table = _get_list_table( $checkbox ? 'WP_Comments_List_Table' : 'WP_Post_Comments_List_Table', array( 'screen' => 'edit-comments' ) );
 
 	$comment = get_comment( $comment_id );
@@ -2737,7 +2737,7 @@ function wp_ajax_set_post_thumbnail() {
 		check_ajax_referer( "set_post_thumbnail-$post_id" );
 	}
 
-	if ( '-1' == $thumbnail_id ) {
+	if ( '-1' === $thumbnail_id ) {
 		if ( delete_post_thumbnail( $post_id ) ) {
 			$return = _wp_post_thumbnail_html( null, $post_id );
 			$json ? wp_send_json_success( $return ) : wp_die( $return );
@@ -3318,7 +3318,7 @@ function wp_ajax_send_attachment_to_editor() {
 		// If this attachment is unattached, attach it. Primarily a back compat thing.
 		$insert_into_post_id = (int) $_POST['post_id'];
 
-		if ( 0 == $post->post_parent && $insert_into_post_id ) {
+		if ( 0 === $post->post_parent && $insert_into_post_id ) {
 			wp_update_post(
 				array(
 					'ID'          => $id,
@@ -4003,7 +4003,7 @@ function wp_ajax_crop_image() {
 			$wp_site_icon = new WP_Site_Icon();
 
 			// Skip creating a new attachment if the attachment is a Site Icon.
-			if ( get_post_meta( $attachment_id, '_wp_attachment_context', true ) == $context ) {
+			if ( get_post_meta( $attachment_id, '_wp_attachment_context', true ) === $context ) {
 
 				// Delete the temporary cropped file, we don't need it.
 				wp_delete_file( $cropped );
